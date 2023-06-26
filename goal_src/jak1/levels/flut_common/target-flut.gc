@@ -1967,7 +1967,7 @@
     )
   :post target-no-stick-post
   )
-
+(define-extern get-current-eco-type (function string))
 (defstate target-flut-get-on (target)
   :event target-generic-event-handler
   :exit (-> target-flut-start exit)
