@@ -69,7 +69,8 @@
                            :alignv 1.0
                            :slope-up-traction 1.0
                            :align-speed 1.0
-                           :flags (surface-flags no-turn-around)
+                           ;;flutfluttodo
+                           :flags (surface-flags allow-look-around)
                            )
         )
 
@@ -276,6 +277,20 @@
   )
 
 (defbehavior target-flut-standard-event-handler target ((arg0 process) (arg1 int) (arg2 symbol) (arg3 event-message-block))
+    ;;flutflut
+    (cond 
+    ((or 
+        (and (= (-> *target* current-level name) 'firecanyon) (>= (the int (-> *game-info* fuel)) 20)) 
+        (and(= (-> *target* current-level name) 'lavatube)(>= (the int (-> *game-info* fuel)) 72))
+        (string= (-> (-> *game-info* current-continue) name)"ogre-race"))
+     (set! (-> *flut-walk-mods* target-speed) (* 2.0 81920.0))
+     (set! (-> *flut-walk-mods* fric) 0.001)
+     )
+    ((= (-> *flut-walk-mods* target-speed) (* 2.0 81920.0))
+     (set! (-> *flut-walk-mods* target-speed) 81920.0)
+     (set! (-> *flut-walk-mods* fric) 1.0)
+     )
+    )
   (cond
     ((and (= arg2 'query) (= (-> arg3 param 0) 'mode))
      'flut
@@ -309,6 +324,11 @@
              (go target-flut-falling #f)
              )
          )
+         ;;flutflut
+        (('launch)
+          ;; handles changing to look-around, fish game, rats game, periscopes, etc
+          (target-standard-event-handler arg0 arg1 arg2 arg3)
+         )
         (('swim)
          (let* ((gp-1 (-> self control last-known-safe-ground))
                 (s3-1 (vector-! (new 'stack-no-clear 'vector) gp-1 (-> self control trans)))
@@ -338,6 +358,20 @@
             (go target-flut-grab)
             )
            )
+         )
+         ;;flutflut
+        (('fishing 'billy 'look-around 'periscope) ;; handles changing to look-around, fish game, rats game, periscopes, etc
+            (target-standard-event-handler arg0 arg1 arg2 arg3)
+          )
+         (('launch)
+         (mem-copy! (&-> (-> self control) unknown-pointer00) (the-as pointer arg3) 72)
+         (let ((a0-9 (-> self control unknown-dword60))
+                (a1-5 (-> self control unknown-dword61))
+                (a2-5 (-> self control unknown-vector102))
+                )
+            (set! (-> a2-5 quad) (-> (the-as vector (-> self control unknown-dword62)) quad))
+            (go target-launch (the-as float a0-9) (the-as symbol a1-5) a2-5 (-> self control unknown-dword63))
+            )
          )
         (('clone-anim)
          (go target-flut-clone-anim (process->handle (the-as process (-> arg3 param 0))))
@@ -787,6 +821,48 @@
       )
     )
   :enter (behavior ((arg0 float) (arg1 float))
+          (when (= (-> self control unknown-symbol40) 'launch)
+      (level-hint-spawn
+        (text-id sidekick-launcher1)
+        "sksp009d"
+        (the-as entity #f)
+        *entity-pool*
+        (game-task none)
+        )
+      (level-hint-spawn
+        (text-id sidekick-launcher2)
+        "sksp009e"
+        (the-as entity #f)
+        *entity-pool*
+        (game-task none)
+        )
+      (case (-> (level-get-target-inside *level*) name)
+        (('citadel)
+         (level-hint-spawn
+           (text-id citadel-launcher2)
+           "sksp0393"
+           (the-as entity #f)
+           *entity-pool*
+           (game-task none)
+           )
+         (level-hint-spawn
+           (text-id citadel-launcher)
+           "sksp0388"
+           (the-as entity #f)
+           *entity-pool*
+           (game-task none)
+           )
+         )
+        )
+      enter-state
+      (let ((a0-9 (-> self control unknown-dword60))
+            (a1-5 (-> self control unknown-dword61))
+            (a2-5 (-> self control unknown-vector102))
+            )
+        (set! (-> a2-5 quad) (-> (the-as vector (-> self control unknown-dword62)) quad))
+        (go target-launch (the-as float a0-9) (the-as symbol a1-5) a2-5 (-> self control unknown-dword63))
+        )
+      )
     (set! (-> self state-time) (-> *display* base-frame-counter))
     (sound-play "jump" :pitch -0.5)
     (init-var-jump arg0 arg1 (the-as vector #t) (the-as vector #t) (-> self control transv))
@@ -918,6 +994,17 @@
 (defstate target-flut-double-jump (target)
   :event (-> target-flut-jump event)
   :enter (behavior ((arg0 float) (arg1 float))
+  ;;flutflut
+   (when (= (-> self control unknown-symbol40) 'launch)
+      enter-state
+      (let ((a0-3 (-> self control unknown-dword60))
+            (a1-1 (-> self control unknown-dword61))
+            (a2-0 (-> self control unknown-vector102))
+            )
+        (set! (-> a2-0 quad) (-> (the-as vector (-> self control unknown-dword62)) quad))
+        (go target-launch (the-as float a0-3) (the-as symbol a1-1) a2-0 (-> self control unknown-dword63))
+        )
+      )
     (set! (-> self state-time) (-> *display* base-frame-counter))
     (init-var-jump arg0 arg1 (the-as vector #t) (the-as vector #t) (-> self control transv))
     (set! (-> self control dynam gravity-max) 40960.0)
@@ -1757,7 +1844,11 @@
                 )
               )
             )
-          (target-hit-move gp-0 (target-hit-orient gp-0 s5-0) target-flut-falling-anim-trans f30-0)
+          ;;flutflut
+          ;; only keep bouncing if we have some health left
+          (if (< 0.0 (-> self fact-info-target health))
+            (target-hit-move gp-0 (target-hit-orient gp-0 s5-0) target-flut-falling-anim-trans f30-0)
+            )
           )
         )
       (if (and (= (-> self game mode) 'play) (>= 0.0 (-> self fact-info-target health)))
@@ -1913,20 +2004,20 @@
       )
     (let ((gp-1 #f))
       (sound-play "uppercut")
-      (ja-channel-push! 1 (seconds 0.05))
-      (ja-no-eval :group! (-> self draw art-group data 155)
-                  :num! (seek! (ja-aframe (the-as float 24.0) 0))
-                  :frame-num 0.0
-                  )
-      (until (ja-done? 0)
-        (when (and (not gp-1) (= (-> self skel root-channel 0) (-> self skel channel)))
+      ;; (ja-channel-push! 1 (seconds 0.05))
+      ;; (ja-no-eval :group! (-> self draw art-group data 155)
+      ;;             :num! (seek! (ja-aframe (the-as float 24.0) 0))
+      ;;             :frame-num 0.0
+      ;;             )
+      ;; (until (ja-done? 0)
+      ;;   (when (and (not gp-1) (= (-> self skel root-channel 0) (-> self skel channel)))
           (send-event (ppointer->process (-> self manipy)) 'anim-mode 'clone-anim)
-          (set! gp-1 #t)
-          )
+          ;; (set! gp-1 #t)
+          ;; )
         (set! (-> self control transv quad) (the-as uint128 0))
-        (suspend)
-        (ja :num! (seek! (ja-aframe (the-as float 24.0) 0)))
-        )
+        ;; (suspend)
+        ;; (ja :num! (seek! (ja-aframe (the-as float 24.0) 0)))
+        ;; )
       )
     (sound-play "flut-coo")
     (logclear! (-> self state-flags) (state-flags use-alt-cam-pos))

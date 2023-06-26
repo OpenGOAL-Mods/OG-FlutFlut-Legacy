@@ -792,7 +792,8 @@
              )
          )
         (('ridden)
-         (if (or (not *target*) (not (logtest? (-> *target* control root-prim prim-core action) (collide-action ca-14))))
+        ;;flutfluttodo
+         (if (not *target*)
              (go elevator-travel-to-fort)
              )
          )
