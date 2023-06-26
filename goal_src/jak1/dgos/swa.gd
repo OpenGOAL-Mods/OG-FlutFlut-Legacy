@@ -4,7 +4,7 @@
   ;; "flut-part.o"
   ;; "flutflut.o"
   ;; "target-flut.o"
-  "eichar-flut+0-ag.go"
+  ;; "eichar-flut+0-ag.go"
   "swamp-obs.o"
   "swamp-bat.o"
   "swamp-rat.o"

@@ -3,7 +3,7 @@
   ;; "flut-part.o"
   ;; "flutflut.o"
   ;; "target-flut.o"
-  "eichar-flut+0-ag.go"
+  ;; "eichar-flut+0-ag.go"
   "target-snowball.o"
   "target-ice.o"
   "ice-cube.o"
