@@ -69,6 +69,7 @@ out/build/Release/*
 !out/build/Release/bin/
 out/build/Release/bin/*
 !out/build/Release/bin/SDL2.dll
+!out/build/Release/bin/openal32.dll
 !out/build/Release/bin/extractor.exe
 !out/build/Release/bin/decompiler.exe
 !out/build/Release/bin/gk.exe
@@ -90,3 +91,4 @@ __pycache__/
 unifont-15.0.03.ttf
 scripts/batch/ReleaseTemplate.zip
 scripts/batch/ReleaseTemplate/*
+.vscode/settings.json
