@@ -955,8 +955,9 @@
               )
             (go process-drawable-art-error "joint-anim")
             (format 0 "dummy-19 bad~%")
-            (break!)
-            (nop!)
+            ;; flutflut was crashing here after a update idk why tho - Zed
+            ;; (break!)
+            ;; (nop!)
             0
             (label cfg-11)
             (set! (-> s2-0 frame-num) (fmax 0.0 (fmin (-> s2-0 frame-num) (the float (+ (-> s1-0 data 0 length) -1)))))

@@ -476,7 +476,7 @@
                 )
           )
     )
-  (none)
+(none)
   )
 
 (defmethod asize-of art-mesh-geo ((obj art-mesh-geo))
