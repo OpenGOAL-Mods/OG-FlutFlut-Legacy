@@ -153,8 +153,7 @@
 (defstate play-anim (warrior)
   :virtual #t
   :exit (behavior ()
-    (send-event (-> (entity-by-type allpontoons) extra process) 'end-mode)
-    ((-> (method-of-type process-taskable play-anim) exit))
+    (start 'play (get-continue-by-name *game-info* "ogre-race"))
     (none)
     )
   )

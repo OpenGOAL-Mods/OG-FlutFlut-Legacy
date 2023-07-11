@@ -928,7 +928,7 @@
        ;; burn. Send a burn event
        ;;(send-event (-> obj process) 'attack #f (static-attack-info ((mode 'burn) (shove-up (meters 3)))))
        ;;flutflut
-        (if (not (or (and (= (-> *target* current-level name) 'firecanyon) (>= (the int (-> *game-info* fuel)) 20)) (and(= (-> *target* current-level name) 'lavatube)(>= (the int (-> *game-info* fuel)) 72))))
+        (if (not (or (and (= (-> *target* current-level name) 'firecanyon) (>= (the int (-> *game-info* fuel)) 0)) (and(= (-> *target* current-level name) 'lavatube)(>= (the int (-> *game-info* fuel)) 0))))
        (begin
         (send-event (-> obj process) 'attack #f (static-attack-info ((mode 'burn) (shove-up (meters 3)))))
        )))
@@ -943,7 +943,7 @@
       ;;      (target-attack-up (the-as target (-> obj process)) 'attack-or-shove 'burnup)
       ;;      )
       ;;flutflut
-        (if (not (or (and (= (-> *target* current-level name) 'firecanyon) (>= (the int (-> *game-info* fuel)) 20)) (and(= (-> *target* current-level name) 'lavatube)(>= (the int (-> *game-info* fuel)) 72))))
+        (if (not (or (and (= (-> *target* current-level name) 'firecanyon) (>= (the int (-> *game-info* fuel)) 0)) (and(= (-> *target* current-level name) 'lavatube)(>= (the int (-> *game-info* fuel)) 0))))
        (begin
               (if (zero? (logand (-> (the-as target (-> obj process)) control root-prim prim-core action) (collide-action ca-9)))
 

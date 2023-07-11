@@ -407,6 +407,7 @@
                                             (the-as uint (-> self vulnerable))
                                             )
                                       )
+                          (set! (-> self hits-to-go) (the-as int 0))
                              (when (> (-> self hits-to-go) 0)
                                (set! (-> self took-hit) #t)
                                (let ((v0-0 (the-as number (+ (-> self hits-to-go) -1))))
