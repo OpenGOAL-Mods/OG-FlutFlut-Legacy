@@ -1128,6 +1128,8 @@
     -1
     8192.0
     )
+  ;; dont spawn these guys, flutflut attacking them can crash
+  (go driller-lurker-die)
   (if (>= (-> this ambient-drilling-u) 0.0)
       (go driller-lurker-idle-drilling)
       (go driller-lurker-patrol)
