@@ -327,7 +327,12 @@
       
       ;; try to load music
       (when (and (!= (-> s5-1 music) (-> gp-0 music))
-                 (and (< 0.0 (-> *setting-control* current music-volume)) (zero? (rpc-busy? 1)) *sound-bank-1* *sound-bank-2*)
+                 (and (< 0.0 (-> *setting-control* current music-volume))
+                      (zero? (rpc-busy? 1))
+                      *sound-bank-1*
+                      *sound-bank-2*
+                      *sound-bank-3*
+                      )
                  )
         (cond
           ((-> s5-1 music)

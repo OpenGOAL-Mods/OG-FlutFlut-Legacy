@@ -308,7 +308,7 @@
 (defmethod update-led pc-settings ((obj pc-settings))
   "set the controller led color by modifying the controller-led-color vector"
   ;; random colors for fun lol
-  (set-vector! (-> obj controller-led-color) (rand-vu) (rand-vu) (rand-vu) 1.0)
+  (set-vector! (-> obj controller-led-color) (mod-rand-next-float) (mod-rand-next-float) (mod-rand-next-float) 1.0)
   ;(set-vector! (-> obj controller-led-color) 0.0 0.0 1.0 1.0)
   #t)
 
@@ -469,6 +469,13 @@
     ;(format 0 "getc got #x~X~%" buf)
     buf
     )
+  )
+
+(define-extern string->uint (function string uint))
+(defun file-stream-read-uint ((file file-stream))
+  (file-stream-seek-past-whitespace file)
+  (file-stream-read-word file)
+  (string->uint *pc-temp-string*)
   )
 
 (defun file-stream-read-int ((file file-stream))

@@ -100,7 +100,7 @@
                       (not (movie?))
                       (not (level-hint-displayed?))
                       (not (logtest? (-> *target* control root-prim prim-core action)
-                                     (collide-action edgegrab-cam swingpole-active racer snowball tube flut)
+                                     (collide-action edgegrab-cam swingpole-active racer snowball tube)
                                      )
                            )
                       (let* ((v1-16 (-> self root))
@@ -486,7 +486,7 @@
   (let ((v1-2 (-> this entity extra perm task)))
     (cond
       ((logtest? (-> *target* control root-prim prim-core action)
-                 (collide-action edgegrab-cam swingpole-active racer snowball tube flut)
+                 (collide-action edgegrab-cam swingpole-active racer snowball tube)
                  )
        #f
        )

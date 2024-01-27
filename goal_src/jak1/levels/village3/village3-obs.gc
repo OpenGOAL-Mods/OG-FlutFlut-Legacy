@@ -7,6 +7,8 @@
 
 ;; DECOMP BEGINS
 
+
+(define s73-1 #f)
 (defskelgroup *med-res-ogre-sg* medres-ogre medres-ogre-lod0-jg medres-ogre-idle-ja
               ((medres-ogre-lod0-mg (meters 999999)))
               :bounds (static-spherem -200 0 -450 350)
@@ -86,6 +88,7 @@
   :virtual #t
   :code (behavior ((arg0 symbol))
     (set-time! (-> self state-time))
+    (set! s73-1 (string= (symbol->string (-> (level-get-target-inside *level*) name)) "snow"))
     (ja-channel-set! 1)
     (cond
       (arg0
@@ -153,10 +156,17 @@
               (s5-1 (vector<-cspace! (new 'stack-no-clear 'vector) (joint-node gondola-lod0-jg main)))
               )
           (cond
-            ((not (or s4-1 (task-closed? (game-task village3-button) (task-status need-hint))))
+            ((not(or s73-1(or s4-1 (task-closed? (game-task village3-button) (task-status need-hint)))))
              )
-            ((and (< (the int (-> *game-info* fuel)) (+ s3-0 2)) (< (the int (-> *game-info* fuel)) 71) (not s4-1))
-             (level-hint-spawn (text-id gondola-need-cells) "asstvb75" (the-as entity #f) *entity-pool* (game-task none))
+
+            ((and (< (the int (-> *game-info* fuel)) (+ s3-0 2)) (< (the int (-> *game-info* fuel)) 71) (not (or s4-1 s73-1)))
+             (level-hint-spawn
+               (text-id gondola-need-cells)
+               "asstvb75"
+               (the-as entity #f)
+               *entity-pool*
+               (game-task none)
+               )
              )
             (else
               (level-hint-spawn (text-id gondola-enough-cells) "asstvb76" (the-as entity #f) *entity-pool* (game-task none))

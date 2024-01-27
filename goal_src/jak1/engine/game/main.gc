@@ -12,6 +12,28 @@
 ;;;;;;;;;;;;;;;;;;;;;;;;;;
 (defun-extern runs-every-frame (none))
 
+(define racer? #f) 
+(define flutflut? #f)
+
+(define-extern randomizer-run-each-frame (function none))
+(define-extern jak-size-run-each-frame (function (none)))
+(define-extern mods-common-run-each-frame (function (none)))
+(define-extern localmulti-run-eachframe (function (none)))
+(defun runMods()
+(randomizer-run-each-frame)
+(jak-size-run-each-frame)
+(mods-common-run-each-frame)
+(localmulti-run-eachframe)
+(none))
+
+(defun reset-all ()
+;;(dotimes (i 205) (sound-play-by-name (static-sound-name "caught-eel") (new-sound-id) 1024 0 0 (sound-group sfx) #t))
+(reset! *game-info* 'game (the-as game-save #f) (the-as string #f))
+  (auto-save-command 'auto-save 0 0 *default-pool*)
+  ;;(dotimes (i 205) (sound-play-by-name (static-sound-name "caught-eel") (new-sound-id) 1024 0 0 (sound-group sfx) #t))
+  (none)
+)
+
 (defun set-letterbox-frames ((arg0 time-frame))
   "Set the letterbox frame counter for arg0 frames in the future"
   (set! (-> *game-info* letterbox-time) (+ (current-time) arg0))
@@ -101,9 +123,50 @@
   )
 
 (defun movie? ()
+
+(set! flutflut? (aif *target* (case (-> it next-state name) (
+                                      (
+                                       'target-flut-air-attack
+                                       'target-flut-air-attack-hit-ground
+                                       'target-flut-clone-anim
+                                       'target-flut-death
+                                       'target-flut-double-jump
+                                       'target-flut-falling
+                                       'target-flut-get-off
+                                       'target-flut-get-off-hit-ground
+                                       'target-flut-get-off-jump
+                                       'target-flut-get-on
+                                       'target-flut-grab
+                                       'target-flut-hit
+                                       'target-flut-hit-ground
+                                       'target-flut-jump
+                                       'target-flut-running-attack
+                                       'target-flut-stance
+                                       'target-flut-start
+                                       'target-flut-walk
+                                       ;; not flutflut, but we don't need to force flutflut in these cases
+                                       'target-periscope
+                                       'target-falling
+                                       'target-clone-anim
+                                       'target-play-anim
+                                       'target-billy-game
+                                       'target-look-around
+                                       'target-fishing
+                                       ;; launcher crap
+                                       'target-launch
+                                       'target-high-jump
+                                       'target-duck-high-jump
+                                       'target-duck-high-jump-jump
+                                       'target-hit-ground) #t))))
+
+(if (and (not flutflut?) (not (and (logtest? (-> *kernel-context* prevent-from-run) (process-mask movie)) (or (= (-> *target* current-level name) 'jungle)(= (-> *target* current-level name) 'village1) )))) (send-event *target* 'change-mode 'flut #f))
+
+
   "Are we in a movie?"
   (logtest? (-> *kernel-context* prevent-from-run) (process-mask movie))
   )
+
+ 
 
 (defun set-master-mode ((new-mode symbol))
   "Update pause masks for the given mode, and set *master-mode*"
@@ -361,9 +424,14 @@
 (define *master-exit* #f)
 (define *progress-cheat* #f)
 (define *first-boot* #t) ;; PAL
-
+(defun-extern localmulti2-start (none))
+(defun-extern localmulti3-start (none))
+(defun-extern localmulti4-start (none))
+(defun-extern spawn-extra-targets-code (none))
 (defun main-cheats ()
   "Handle cheat codes and timeout"
+
+  (spawn-extra-targets-code)
 
   ;; look for codes when L3 is pushed
   (when (and (cpad-hold? 0 l3)
@@ -579,6 +647,8 @@
       
       ;; start immediately after all process updates finish.
       (profiler-instant-event "display-loop-top")
+
+      (runMods)
 
       ;; drawing effects to be used in foreground drawing.
       (with-profiler "foreground-effects"

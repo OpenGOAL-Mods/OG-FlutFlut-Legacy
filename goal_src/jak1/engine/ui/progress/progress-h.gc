@@ -130,6 +130,10 @@
   (credits)
   (quit-title)
   (flava-player)
+  (randomizer-warp-options)
+  (randomizer-main-options)
+  (challenges-options)
+  (mod-options)
   (memcard-disable-auto-save)
   (memcard-auto-save-disabled)
   (monitor)
@@ -137,6 +141,8 @@
   (speedrun-options)
   (speedrun-il-options)
   (speedrun-cat-ext-options)
+  ;; mods
+  (additional-checkpoint-options)
 
   ;; the last one!
   (max)
@@ -169,11 +175,14 @@
   (aspect-native)
   (button-music)
   (button-flava)
+  (use-random-seed?)
   (cheat-toggle)
   (monitor)
   (controller)
   (binding-assignment)
   (confirmation)
+  (rng-lib)
+  (checkpoint-logic)
   )
 
     ) ;; end of PC_PORT = #t branch for enum initialization
