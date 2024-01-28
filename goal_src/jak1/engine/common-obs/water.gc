@@ -1226,6 +1226,9 @@
 (defstate water-vol-startup (water-vol)
   :virtual #t
   :code (behavior ()
+    (when (name= (-> self name) 'cave-water-3)  ;; OG-flutflut-legacy dont spawn dark cave water for crystal access
+      (deactivate self)
+      )
     (go-virtual water-vol-idle)
     )
   )
