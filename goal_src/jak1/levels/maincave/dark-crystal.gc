@@ -640,12 +640,6 @@
     )
   (ja-post)
   (update-transforms! (-> this root))
-  ;; activate underwater ones that flutflut cant get to
-  (case (-> this name)
-    (('dark-crystal-2 'dark-crystal-5)
-      (go dark-crystal-activate)
-      )
-    )
   (if (and (-> this entity) (logtest? (-> this entity extra perm status) (entity-perm-status complete)))
       (go dark-crystal-spawn-fuel-cell)
       (go dark-crystal-idle)

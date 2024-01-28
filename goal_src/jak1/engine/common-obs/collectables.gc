@@ -767,7 +767,7 @@
       )
     (runs-on-eco-pickup (-> self fact pickup-type) (ppointer->process (-> self parent)))  ;; trigger hook for mod base
     
-    (if (and 
+    (when (and 
         (-> *randomizer-settings* checkpoint-randomizer?)
         (or 
           (and (-> *randomizer-settings* warp-on-green-eco?) (= (-> self fact pickup-type) (pickup-type eco-green)))
@@ -777,9 +777,7 @@
           (and (-> *randomizer-settings* warp-on-yellow-eco?) (= (-> self fact pickup-type) (pickup-type eco-yellow)))
         )
       )
-     (begin
-        (orchestrateCheckpointWarp 1)
-      )
+      (orchestrateCheckpointWarp 1)
     )
     (if (nonzero? (-> self part))
         (kill-and-free-particles (-> self part))
@@ -1630,9 +1628,7 @@
     (remove-setting! 'sfx-volume)
     (remove-setting! 'ambient-volume)
     (send-event *target* 'blend-shape #f)
-    (when (and (not flutflut?) (not racer?)) 
-      (send-event *target* 'end-mode)
-      )
+    (send-event *target* 'end-mode)
     (send-event *camera* 'no-intro)
     (send-event *camera* 'clear-entity)
     (ja-channel-set! 0)
