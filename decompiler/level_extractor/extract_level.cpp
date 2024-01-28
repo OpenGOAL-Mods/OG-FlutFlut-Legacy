@@ -130,7 +130,7 @@ void extract_art_groups_from_level(const ObjectFileDB& db,
     if (file.name.length() > 3 && !file.name.compare(file.name.length() - 3, 3, "-ag")) {
       const auto& ag_file = db.lookup_record(file);
       extract_merc(ag_file, tex_db, db.dts, tex_remap, level_data, false, db.version());
-      extract_joint_group(ag_file, db.dts, db.version(), art_group_data);
+      //extract_joint_group(ag_file, db.dts, db.version(), art_group_data);
     }
   }
 }
@@ -353,6 +353,15 @@ void extract_from_level(const ObjectFileDB& db,
       extract_bsp_from_level(db, tex_db, dgo_name, config, extract_collision, level_data);
   extract_art_groups_from_level(db, tex_db, bsp_header.texture_remap_table, dgo_name, level_data,
                                 art_group_data);
+
+  // for jak 1, copy snowy art group into any other level
+  if (config.game_name == "jak1" && dgo_name != "SNO.DGO") {
+    extract_art_groups_from_level(
+        db, tex_db,
+        extract_bsp_from_level(db, tex_db, "SNO.DGO", config, extract_collision, level_data)
+            .texture_remap_table,
+        "SNO.DGO", level_data, art_group_data);
+  }
 
   Serializer ser;
   level_data.serialize(ser);

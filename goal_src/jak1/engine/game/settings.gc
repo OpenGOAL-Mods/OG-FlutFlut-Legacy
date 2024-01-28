@@ -327,7 +327,12 @@
       
       ;; try to load music
       (when (and (!= (-> s5-1 music) (-> gp-0 music))
-                 (and (< 0.0 (-> *setting-control* current music-volume)) (zero? (rpc-busy? 1)) *sound-bank-1* *sound-bank-2*)
+                 (and (< 0.0 (-> *setting-control* current music-volume))
+                      (zero? (rpc-busy? 1))
+                      *sound-bank-1*
+                      *sound-bank-2*
+                      *sound-bank-3*
+                      )
                  )
         (cond
           ((-> s5-1 music)
@@ -436,7 +441,7 @@
     (set! (-> gp-0 process-mask) (process-mask execute sleep))
     (set! (-> gp-0 screenx) 0)
     (set! (-> gp-0 screeny) 0)
-    (set! (-> gp-0 vibration) #t)
+    (set! (-> gp-0 vibration) #f)
     (set! (-> gp-0 auto-save) #f)
     (set! (-> gp-0 play-hints) #f)
     (set! (-> gp-0 movie) (the-as (pointer process) #f))

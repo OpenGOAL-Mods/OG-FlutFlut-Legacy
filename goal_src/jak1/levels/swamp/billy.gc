@@ -1046,7 +1046,7 @@
 (defmethod target-above-threshold? ((this billy))
   (the-as
     symbol
-    (and *target* (not (logtest? (-> *target* control root-prim prim-core action) (collide-action flut))))
+    (and *target*)
     )
   )
 

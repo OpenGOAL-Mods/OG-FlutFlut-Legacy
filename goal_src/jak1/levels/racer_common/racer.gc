@@ -438,6 +438,7 @@
     )
   (set! (-> this sound)
         (new 'process 'ambient-sound (static-sound-spec "zoom-teleport" :fo-max 30) (-> this root trans))
+
         )
   (go (method-of-object this wait-for-start))
   (none)

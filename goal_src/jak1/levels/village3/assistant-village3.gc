@@ -82,8 +82,12 @@
   )
 
 (defmethod should-display? ((this assistant-villagec))
-  (and (task-closed? (game-task village3-button) (task-status need-introduction)) (not (sages-kidnapped?)))
-  )
+  (and (task-closed? (game-task village3-button) (task-status need-introduction))
+       (or (not (sages-kidnapped?))
+           (-> *randomizer-settings* checkpoint-randomizer?)
+           )
+       )
+)
 
 (defmethod target-above-threshold? ((this assistant-villagec))
   (the-as symbol (and *target* (< (-> (target-pos 0) z) -14245888.0)))
