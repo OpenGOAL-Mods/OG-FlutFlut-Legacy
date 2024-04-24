@@ -442,7 +442,7 @@
          (do-joint-math! self)
          )
         (('clone-anim)
-         (clone-anim-once           
+         (clone-anim-once
             (if (handle->process (-> self cur-target-handle))
                 (the-as handle (-> self cur-target-handle))
                 (ppointer->handle (-> self parent))
@@ -1890,7 +1890,8 @@
 
 (defstate launcher-active (launcher)
   :event (behavior ((proc process) (argc int) (message symbol) (block event-message-block))
-    (when (= message 'attack) ;; (or (= message 'touch) (= message 'attack))
+  ;;Hack here to just work if we are close to it. flut flutflut
+    (when (or (>= (vector-vector-distance (-> self root trans) (-> *target* root trans)) (meters 0.1)) (= message 'attack)) ;; (or (= message 'touch) (= message 'attack))
       (set-time! (-> self state-time))
       (send-event proc 'launch (-> self spring-height) (-> self camera) (-> self dest) (-> self seek-time))
       )
