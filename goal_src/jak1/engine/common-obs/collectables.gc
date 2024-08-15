@@ -1099,7 +1099,8 @@
     (remove-setting! 'sfx-volume)
     (remove-setting! 'ambient-volume)
     (send-event *target* 'blend-shape #f)
-    (when (and (not flutflut?) (not racer?))
+    (when (enable-powercell-cutscenes?)
+      ;; only do this if we're watching power cell cutscenes
       (send-event *target* 'end-mode)
       )
     (send-event *camera* 'no-intro)

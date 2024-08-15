@@ -243,7 +243,9 @@ level_tools::BspHeader extract_bsp_from_level(const ObjectFileDB& db,
   if (bsp_header.hfrag) {
     extract_hfrag(bsp_header, tex_db, &level_data);
   }
-  level_data.level_name = bsp_header.name;
+  if (level_data.level_name == "") {
+    level_data.level_name = bsp_header.name;
+  }
 
   return bsp_header;
 }
@@ -350,12 +352,16 @@ void extract_from_level(const ObjectFileDB& db,
 
   // for jak 1, copy snowy art group into any other level
   if (config.game_name == "jak1" && dgo_name != "SNO.DGO") {
-    lg::info("trying to extract SNO.DGO for other DGO {}", dgo_name);
+    lg::info("copying in stuff from SNO.DGO for other DGO {}", dgo_name);
+    add_all_textures_from_level(level_data, "SNO.DGO", tex_db);
+    lg::info("textures added from SNO.DGO for other DGO {}", dgo_name);
+    auto tmp_bsp = extract_bsp_from_level(db, tex_db, "SNO.DGO", config, level_data);
     extract_art_groups_from_level(
         db, tex_db,
-        extract_bsp_from_level(db, tex_db, "SNO.DGO", config, level_data)
+        tmp_bsp
             .texture_remap_table,
         "SNO.DGO", level_data, art_group_data);
+    lg::info("art groups added from SNO.DGO for other DGO {}", dgo_name);
   }
 
   Serializer ser;
@@ -366,6 +372,7 @@ void extract_from_level(const ObjectFileDB& db,
   print_memory_usage(level_data, ser.get_save_result().second);
   lg::info("compressed: {} -> {} ({:.2f}%)", ser.get_save_result().second, compressed.size(),
            100.f * compressed.size() / ser.get_save_result().second);
+  lg::info("writing {}.fr3", level_data.level_name);
   file_util::write_binary_file(output_folder / fmt::format("{}.fr3", level_data.level_name),
                                compressed.data(), compressed.size());
 
