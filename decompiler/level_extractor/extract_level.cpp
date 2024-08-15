@@ -350,6 +350,7 @@ void extract_from_level(const ObjectFileDB& db,
 
   // for jak 1, copy snowy art group into any other level
   if (config.game_name == "jak1" && dgo_name != "SNO.DGO") {
+    lg::info("trying to extract SNO.DGO for other DGO {}", dgo_name);
     extract_art_groups_from_level(
         db, tex_db,
         extract_bsp_from_level(db, tex_db, "SNO.DGO", config, level_data)
