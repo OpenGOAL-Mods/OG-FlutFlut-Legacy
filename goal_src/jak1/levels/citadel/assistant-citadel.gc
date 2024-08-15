@@ -82,7 +82,7 @@
   (first-any (-> this tasks) #t)
   (let ((v1-3 (current-status (-> this tasks))))
     (and (or (= v1-3 (task-status need-reward-speech)) (= v1-3 (task-status invalid)))
-         (or (enable-citadel-cutscene-skips)
+         (or (enable-citadel-cutscene-skips?)
              (not (task-closed? (game-task citadel-sage-green) (task-status need-hint)))))))
 
 (defmethod init-from-entity! ((this assistant-lavatube-end) (arg0 entity-actor))

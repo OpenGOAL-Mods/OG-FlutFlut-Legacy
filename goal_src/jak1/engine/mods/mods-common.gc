@@ -16,7 +16,7 @@
 (and
 (-> *randomizer-settings* checkpoint-randomizer?)))
 
-(defun enable-citadel-cutscene-skips ()
+(defun enable-citadel-cutscene-skips? ()
 ;;relies on modifcations in collectibles.gc
 ;;relies on modifcations in assistant-citadel.gc
 (and
@@ -26,7 +26,7 @@
 (and
 (-> *randomizer-settings* checkpoint-randomizer?)))
 
-(defun play-powercell-cutscenes? ()
+(defun enable-powercell-cutscenes? ()
 ;;depends on modifications in snow-obs (crash)
 (or
    (and 
@@ -61,7 +61,7 @@
 
 
 
-(defun unlock-citadel-door-no-cells()
+(defun unlock-citadel-door-no-cells ()
 ;;Unlock citadel door if the randomizer is on. Invis wall is removed elsewhere (racer.gc). Softlocks bad.
 (if (entity-by-name "citb-iris-door-21")
   ;; rather than trigger the warp gate switch at end of lava tube with:

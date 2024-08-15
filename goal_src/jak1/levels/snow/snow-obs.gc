@@ -1024,7 +1024,7 @@
         (suspend)
         (set! v1-1 (or (not *target*) (not (logtest? (-> *target* state-flags) (state-flags grabbed))))))
       (sound-play "prec-button1" :pitch -1)
-      (when (play-powercell-cutscenes?)
+      (when (enable-powercell-cutscenes?)
         (let ((gp-1 (get-process *default-dead-pool* snowcam #x4000)))
           (set! (-> (the-as snowcam
                             (-> (when gp-1
