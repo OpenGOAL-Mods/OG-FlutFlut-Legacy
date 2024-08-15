@@ -28,27 +28,19 @@
 
 (defun enable-powercell-cutscenes? ()
 ;;depends on modifications in snow-obs (crash)
-(or
-   (and 
-        (not (and 
-            (-> *randomizer-settings* checkpoint-randomizer?) 
-            (-> *randomizer-settings* warp-on-cell?) 
-         ))
-         (-> *mods-settings* mod-powercellcutscenes?)
-      )
-    ))
+  (not (and (-> *randomizer-settings* checkpoint-randomizer?) (-> *randomizer-settings* warp-on-cell?)))
+  )
 
 (defun enable-unlock-citadel-door-no-cells ()
 ;;depends on modifcations in racer.gc
-(or
-(and 
-          (-> *randomizer-settings* checkpoint-randomizer?)
-          (or 
-            (= (-> *level* level 0 name) 'lavatube) 
-            (= (-> *level* level 0 name) 'citadel)
-          )
-        )
-))
+  (and 
+    (-> *randomizer-settings* checkpoint-randomizer?)
+    (or 
+      (= (-> *level* level 0 name) 'lavatube) 
+      (= (-> *level* level 0 name) 'citadel)
+      )
+    )
+  )
 
 (defun enable-pelican-explode-punch ()
 ;;Depends on modifcations in pelican.gc
