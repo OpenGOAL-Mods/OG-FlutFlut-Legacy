@@ -3,6 +3,7 @@
 
 ;; definition for method 12 of type bot
 (defmethod run-logic? ((this bot))
+  "Should this process be run? Checked by execute-process-tree."
   #t
   )
 
@@ -437,8 +438,8 @@
 ;; WARN: Return type mismatch int vs enemy-aware.
 (defmethod update-target-awareness! ((this bot) (arg0 process-focusable) (arg1 enemy-best-focus))
   "Checks a variety of criteria to determine the level of awareness the enemy is of the target.  Sets `aware` and related fields as well!
-@TODO - flesh out docs
-@returns the value that sets `aware`"
+   @TODO - flesh out docs
+   @returns the value that sets `aware`"
   (the-as enemy-aware 3)
   )
 
@@ -741,7 +742,7 @@
 ;; WARN: disable def twice: 280. This may happen when a cond (no else) is nested inside of another conditional, but it should be rare.
 (defmethod general-event-handler ((this bot) (arg0 process) (arg1 int) (arg2 symbol) (arg3 event-message-block))
   "Handles various events for the enemy
-@TODO - unsure if there is a pattern for the events and this should have a more specific name"
+   @TODO - unsure if there is a pattern for the events and this should have a more specific name"
   (local-vars (v0-0 object))
   (case arg2
     (('track)
@@ -1077,7 +1078,7 @@
 ;; WARN: Using new Jak 2 rtype-of
 (defmethod bot-check-too-far ((this bot))
   "Call the current [[bot-waypoint]]'s `check-too-far` function if available, otherwise use the default `course` one.
-If the player is too far, play a warning speech."
+   If the player is too far, play a warning speech."
   (let ((result 0))
     (let ((too-far-check (-> this delay-too-far-check)))
       (cond
@@ -1146,9 +1147,9 @@ If the player is too far, play a warning speech."
 ;; definition for method 55 of type bot
 (defmethod common-post ((this bot))
   "Does a lot of various things relating to interacting with the target
-- tracks when the enemy was last drawn
-- looks at the target and handles attacking
-@TODO Not extremely well understood yet"
+   - tracks when the enemy was last drawn
+   - looks at the target and handles attacking
+   @TODO Not extremely well understood yet"
   (set! (-> this travel-prev-ry) (-> this travel-prev-ry1))
   (set! (-> this travel-prev-ry1) (quaternion-y-angle (-> this root quat)))
   (let ((f0-4 (/ (the float (-> this hit-points)) (the float (-> this enemy-info default-hit-points)))))
@@ -1414,21 +1415,22 @@ If the player is too far, play a warning speech."
 
 ;; definition for method 7 of type bot
 ;; WARN: Return type mismatch nav-enemy vs bot.
-(defmethod relocate ((this bot) (arg0 int))
+(defmethod relocate ((this bot) (offset int))
   (if (nonzero? (-> this ai-ctrl))
-      (&+! (-> this ai-ctrl) arg0)
+      (&+! (-> this ai-ctrl) offset)
       )
   (if (nonzero? (-> this task))
-      (&+! (-> this task) arg0)
+      (&+! (-> this task) offset)
       )
   (if (nonzero? (-> this swivel-joint-mod))
-      (&+! (-> this swivel-joint-mod) arg0)
+      (&+! (-> this swivel-joint-mod) offset)
       )
-  (the-as bot ((method-of-type nav-enemy relocate) this arg0))
+  (the-as bot ((method-of-type nav-enemy relocate) this offset))
   )
 
 ;; definition for method 10 of type bot
 (defmethod deactivate ((this bot))
+  "Make a process dead, clean it up, remove it from the active pool, and return to dead pool."
   (send-event (handle->process (-> this health-handle)) 'hide-and-die)
   (if (nonzero? (-> this ai-ctrl))
       (ai-task-control-method-9 (-> this ai-ctrl))

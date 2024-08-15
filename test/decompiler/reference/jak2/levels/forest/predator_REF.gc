@@ -461,7 +461,7 @@
 ;; definition for method 74 of type predator
 (defmethod general-event-handler ((this predator) (arg0 process) (arg1 int) (arg2 symbol) (arg3 event-message-block))
   "Handles various events for the enemy
-@TODO - unsure if there is a pattern for the events and this should have a more specific name"
+   @TODO - unsure if there is a pattern for the events and this should have a more specific name"
   (case arg2
     (('attack)
      (set! (-> this shock-effect-end) (the-as uint (+ (current-time) (seconds 1))))
@@ -1390,9 +1390,9 @@
 ;; WARN: Return type mismatch int vs none.
 (defmethod common-post ((this predator))
   "Does a lot of various things relating to interacting with the target
-- tracks when the enemy was last drawn
-- looks at the target and handles attacking
-@TODO Not extremely well understood yet"
+   - tracks when the enemy was last drawn
+   - looks at the target and handles attacking
+   @TODO Not extremely well understood yet"
   (let ((t9-0 (method-of-type nav-enemy common-post)))
     (t9-0 this)
     )
@@ -1500,8 +1500,8 @@
   )
 
 ;; definition for method 7 of type predator
-(defmethod relocate ((this predator) (arg0 int))
-  (call-parent-method this arg0)
+(defmethod relocate ((this predator) (offset int))
+  (call-parent-method this offset)
   )
 
 ;; definition for method 167 of type predator
@@ -1521,6 +1521,7 @@
 
 ;; definition for method 12 of type predator
 (defmethod run-logic? ((this predator))
+  "Should this process be run? Checked by execute-process-tree."
   #t
   )
 
@@ -1539,11 +1540,11 @@
 ;; WARN: Return type mismatch entity-perm-status vs none.
 (defmethod init-from-entity! ((this predator) (arg0 entity-actor))
   "Typically the method that does the initial setup on the process, potentially using the [[entity-actor]] provided as part of that.
-This commonly includes things such as:
-- stack size
-- collision information
-- loading the skeleton group / bones
-- sounds"
+   This commonly includes things such as:
+   - stack size
+   - collision information
+   - loading the skeleton group / bones
+   - sounds"
   (process-entity-status! this (entity-perm-status dead) #t)
   (none)
   )
@@ -1650,12 +1651,12 @@ This commonly includes things such as:
 
 ;; definition for method 7 of type predator-manager
 ;; WARN: Return type mismatch process vs predator-manager.
-(defmethod relocate ((this predator-manager) (arg0 int))
+(defmethod relocate ((this predator-manager) (offset int))
   (set! *predator-manager* this)
   (if *predator-manager*
-      (set! *predator-manager* (&+ *predator-manager* arg0))
+      (set! *predator-manager* (&+ *predator-manager* offset))
       )
-  (the-as predator-manager ((method-of-type process relocate) this arg0))
+  (the-as predator-manager ((method-of-type process relocate) this offset))
   )
 
 ;; definition for method 16 of type predator-manager
@@ -1716,11 +1717,11 @@ This commonly includes things such as:
 ;; WARN: new jak 2 until loop case, check carefully
 (defmethod init-from-entity! ((this predator-manager) (arg0 entity-actor))
   "Typically the method that does the initial setup on the process, potentially using the [[entity-actor]] provided as part of that.
-This commonly includes things such as:
-- stack size
-- collision information
-- loading the skeleton group / bones
-- sounds"
+   This commonly includes things such as:
+   - stack size
+   - collision information
+   - loading the skeleton group / bones
+   - sounds"
   (local-vars (sv-16 res-tag))
   (rlet ((acc :class vf)
          (vf0 :class vf)

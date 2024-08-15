@@ -25,6 +25,8 @@
 (define-extern target-hit-orient (function attack-info vector symbol :behavior target))
 (define-extern target-hit-move (function attack-info symbol (function none :behavior target) float none :behavior target))
 
+(define-extern *target-board-hold-tricks* int)
+
 (declare-type grenade projectile)
 
 ;; DECOMP BEGINS
@@ -120,7 +122,6 @@
   (none)
   )
 
-(define-extern *target-board-hold-tricks* int)
 
 ;; WARN: Return type mismatch object vs none.
 (defbehavior target-board-spin-check target ()
@@ -587,13 +588,8 @@
              )
         (go target-board-duck-stance)
         )
-    (when (and (logtest? (logior (logior (-> *cpad-list* cpads (-> self control cpad number) button0-rel 0)
-                                         (-> *cpad-list* cpads (-> self control cpad number) button0-rel 1)
-                                         )
-                                 (-> *cpad-list* cpads (-> self control cpad number) button0-rel 2)
-                                 )
-                         (pad-buttons x)
-                         )
+    ;; og:preserve-this - High FPS Fix - https://github.com/open-goal/jak-project/pull/3178
+    (when (and (recently-pressed? x)
                (can-jump? 'board)
                )
       (let ((gp-0 (vector-flatten!
@@ -763,13 +759,8 @@
              )
         (go target-board-stance)
         )
-    (when (and (logtest? (logior (logior (-> *cpad-list* cpads (-> self control cpad number) button0-rel 0)
-                                         (-> *cpad-list* cpads (-> self control cpad number) button0-rel 1)
-                                         )
-                                 (-> *cpad-list* cpads (-> self control cpad number) button0-rel 2)
-                                 )
-                         (pad-buttons x)
-                         )
+    ;; og:preserve-this - High FPS Fix - https://github.com/open-goal/jak-project/pull/3178
+    (when (and (recently-pressed? x)
                (can-jump? 'board)
                )
       (let ((gp-0 (vector-flatten!
@@ -1929,13 +1920,8 @@
     )
   :exit target-board-exit
   :trans (behavior ()
-    (when (and (logtest? (logior (logior (-> *cpad-list* cpads (-> self control cpad number) button0-rel 0)
-                                         (-> *cpad-list* cpads (-> self control cpad number) button0-rel 1)
-                                         )
-                                 (-> *cpad-list* cpads (-> self control cpad number) button0-rel 2)
-                                 )
-                         (pad-buttons x)
-                         )
+    ;; og:preserve-this - High FPS Fix - https://github.com/open-goal/jak-project/pull/3178
+    (when (and (recently-pressed? x)
                (can-jump? 'board)
                )
       (flush-trick-list (-> self board))
@@ -2026,13 +2012,8 @@
     )
   :exit target-board-exit
   :trans (behavior ()
-    (when (and (logtest? (logior (logior (-> *cpad-list* cpads (-> self control cpad number) button0-rel 0)
-                                         (-> *cpad-list* cpads (-> self control cpad number) button0-rel 1)
-                                         )
-                                 (-> *cpad-list* cpads (-> self control cpad number) button0-rel 2)
-                                 )
-                         (pad-buttons x)
-                         )
+    ;; og:preserve-this - High FPS Fix - https://github.com/open-goal/jak-project/pull/3178
+    (when (and (recently-pressed? x)
                (can-jump? 'board)
                )
       (flush-trick-list (-> self board))
@@ -2174,13 +2155,8 @@
       )
     )
   :trans (behavior ()
-    (when (and (logtest? (logior (logior (-> *cpad-list* cpads (-> self control cpad number) button0-rel 0)
-                                         (-> *cpad-list* cpads (-> self control cpad number) button0-rel 1)
-                                         )
-                                 (-> *cpad-list* cpads (-> self control cpad number) button0-rel 2)
-                                 )
-                         (pad-buttons x)
-                         )
+    ;; og:preserve-this - High FPS Fix - https://github.com/open-goal/jak-project/pull/3178
+    (when (and (recently-pressed? x)
                (can-jump? 'board)
                )
       (let ((v1-15 (/ (- (current-time) (-> self board ride-start-time)) 300)))

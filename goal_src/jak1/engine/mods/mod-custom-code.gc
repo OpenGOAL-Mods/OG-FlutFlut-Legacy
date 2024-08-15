@@ -22,7 +22,13 @@ an orb |#
 ;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 (defun runs-every-frame ()
-  ;;(increase-power-cell-by-one) This is a call to increase-power-cell-by-one defined in mod-common-functions.gc
+  (when (>= *flut-bounce-count* 3.0)
+    (let ((a1-3 (new 'stack 'font-context *font-default-matrix* 56 160 0.0 (font-color default) (font-flags shadow kerning))))
+      (set! (-> a1-3 width) (the float 400))
+      (set! (-> a1-3 height) (the float 96))
+      (set! (-> a1-3 flags) (font-flags shadow kerning middle middle-vert large))
+      (print-game-text "PRESS TRIANGLE TO DIE" a1-3 #f 128 22))
+    (when (cpad-pressed? 0 triangle) (set! (-> *target* fact health) 0.0) (send-event *target* 'attack-invinc #f (static-attack-info ((mode 'melt))))))
   
   (if *show-input-display* 
     (input-display-on)
