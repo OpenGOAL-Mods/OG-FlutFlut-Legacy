@@ -350,11 +350,9 @@ void extract_from_level(const ObjectFileDB& db,
   extract_art_groups_from_level(db, tex_db, bsp_header.texture_remap_table, dgo_name, level_data,
                                 art_group_data);
 
-  // for jak 1, copy snowy art group into any other level
+  // for jak 1, copy snowy art group into any other level (flutflut)
   if (config.game_name == "jak1" && dgo_name != "SNO.DGO") {
-    lg::info("copying in stuff from SNO.DGO for other DGO {}", dgo_name);
     add_all_textures_from_level(level_data, "SNO.DGO", tex_db);
-    lg::info("textures added from SNO.DGO for other DGO {}", dgo_name);
     auto tmp_bsp = extract_bsp_from_level(db, tex_db, "SNO.DGO", config, level_data);
     extract_art_groups_from_level(
         db, tex_db,
