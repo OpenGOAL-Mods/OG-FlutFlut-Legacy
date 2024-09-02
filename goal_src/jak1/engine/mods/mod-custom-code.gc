@@ -1,25 +1,25 @@
-    ;;-*-Lisp-*-
-    (in-package goal)
+;;-*-Lisp-*-
+(in-package goal)
 
-    ;; name: mod-custom-code.gc
-    ;; name in dgo: mod-custom-code
-    ;; dgos: TODO
+;; name: mod-custom-code.gc
+;; name in dgo: mod-custom-code
+;; dgos: TODO
 
+;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; What is this file for.
+;;;;;;;;;;;;;;;;;;;;;;;;;;
 
-    ;;;;;;;;;;;;;;;;;;;;;;;;;;
-    ;; What is this file for.
-    ;;;;;;;;;;;;;;;;;;;;;;;;;;
-
-    #| This file contains function defenitions that are pre placed in the mod base,
+#|
+ This file contains function defenitions that are pre placed in the mod base,
     so if you place custom code inside of these functions, it will exectue based on
     the name of the function, for example, if you place (set! (-> *game-info* fuel) (+ (-> *game-info* fuel) 1))
     to the function named runs-on-orb-pickup, then jaks powercell count will increase each time you collect
-    an orb |#
+    an orb
+|#
 
-
-    ;;;;;;;;;;;;;;;;;;;;;;;;;;
-    ;; Begin function defintions.
-    ;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; Begin function defintions.
+;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 (defun runs-every-frame ()
   ;;(increase-power-cell-by-one) This is a call to increase-power-cell-by-one defined in mod-common-functions.gc
@@ -69,17 +69,9 @@
               )
       (orchestrateCheckpointWarp 1)
       )
-
-    (when from-cache?
-      ;; Code here runs only if the orb was from an orb cache
-
-      )
-
     (when (not from-cache?)
       ;; Code here runs only if the orb was NOT from an orb cache
-
-      )
-    )
+      ))
   (none))
 
 (defun runs-on-fly-pickup ()
