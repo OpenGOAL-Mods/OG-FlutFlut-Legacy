@@ -125,6 +125,8 @@ struct EnvmapSettings {
 };
 
 EnvmapSettings envmap_settings_from_gltf(const tinygltf::Material& mat);
+bool material_has_envmap(const tinygltf::Material& mat);
+bool envmap_is_valid(const tinygltf::Material& mat, bool die);
 
 /*!
  * Find the index of the skin for this model. Returns nullopt if there is no skin, the index of the
@@ -132,6 +134,7 @@ EnvmapSettings envmap_settings_from_gltf(const tinygltf::Material& mat);
  */
 std::optional<int> find_single_skin(const tinygltf::Model& model,
                                     const std::vector<NodeWithTransform>& all_nodes);
+int get_joint_count(const tinygltf::Model& model, int skin_idx);
 
 template <typename T, int n>
 std::vector<math::Vector<T, n>> extract_vec(const tinygltf::Model& model,
@@ -177,52 +180,4 @@ math::Matrix4f matrix_from_trs(const math::Vector3f& trans,
 
 tfrag3::PackedTimeOfDay pack_time_of_day(const std::vector<math::Vector<u8, 4>>& color_palette);
 
-/*!
- * Find the index of the skin for this model. Returns nullopt if there is no skin, the index of the
- * skin if there is a single skin used, or fatal error if there are multiple skins.
- */
-std::optional<int> find_single_skin(const tinygltf::Model& model,
-                                    const std::vector<NodeWithTransform>& all_nodes);
-
-template <typename T, int n>
-std::vector<math::Vector<T, n>> extract_vec(const tinygltf::Model& model,
-                                            int accessor_idx,
-                                            int format) {
-  const auto& accessor = model.accessors[accessor_idx];
-  const auto& buffer_view = model.bufferViews[accessor.bufferView];
-  const auto& buffer = model.buffers[buffer_view.buffer];
-  const u8* data_ptr = buffer.data.data() + buffer_view.byteOffset + accessor.byteOffset;
-  const auto stride = accessor.ByteStride(buffer_view);
-  const auto count = accessor.count;
-
-  // ASSERT(buffer_view.target == TINYGLTF_TARGET_ARRAY_BUFFER);  // ??
-  if (accessor.componentType != format) {
-    lg::die("mismatched format, wanted {} but got {}", format, accessor.componentType);
-  }
-  ASSERT(accessor.componentType == format);
-  switch (n) {
-    case 3:
-      ASSERT(accessor.type == TINYGLTF_TYPE_VEC3);
-      break;
-    case 4:
-      ASSERT(accessor.type == TINYGLTF_TYPE_VEC4);
-      break;
-    default:
-      ASSERT_NOT_REACHED();
-  }
-
-  std::vector<math::Vector<T, n>> result(accessor.count);
-  for (size_t x = 0; x < count; x++) {
-    for (int i = 0; i < n; i++) {
-      memcpy(&result[x][i], data_ptr + sizeof(T) * i, sizeof(T));
-    }
-    data_ptr += stride;
-  }
-  return result;
-}
-
-std::vector<float> extract_floats(const tinygltf::Model& model, int accessor_idx);
-math::Matrix4f matrix_from_trs(const math::Vector3f& trans,
-                               const math::Vector4f& quat,
-                               const math::Vector3f& scale);
 }  // namespace gltf_util

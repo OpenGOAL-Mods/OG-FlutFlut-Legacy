@@ -82,10 +82,6 @@
   (none)
   )
 
-(defun runs-on-fly-pickup ()
-  ;; Code here runs on any scout fly pickup
-  (none))
-
 (defun runs-on-cell-pickup ((cell-event symbol))
   (case cell-event
     (('pickup)
