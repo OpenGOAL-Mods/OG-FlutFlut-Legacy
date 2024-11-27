@@ -46,7 +46,7 @@
     (input-display-on)
     (input-display-off)
     )
-  
+
   ;; ensure orb-placer is spawned/killed as requested, debug menu is updated
   (when *debug-segment*
     (orb-placer-maintenance)
@@ -82,20 +82,19 @@
   (none)
   )
 
+(defun runs-on-fly-pickup ()
+  ;; Code here runs on any scout fly pickup
+  (none))
+
 (defun runs-on-cell-pickup ((cell-event symbol))
   (case cell-event
     (('pickup)
-      ;; Code here runs as soon as you pickup a powercell
-
-      )
+     ;; Code here runs as soon as you pickup a powercell
+     )
     (('cutscene-end)
-      ;; Code here runs at the end of any powercell cutscene
-
-      )
-    )
-
-  (none)
-  )
+     ;; Code here runs at the end of any powercell cutscene
+     ))
+  (none))
 
 (defun runs-on-eco-pickup ((eco-type pickup-type) (parent process-tree))
   (when (and
@@ -148,31 +147,22 @@
 
 (defun runs-on-jak-spawn ()
   ;; Code here runs every time jak spawns (loading a file new game or death)
-
   ;;uncomment this to use custom music for custom levels - the function is in mod-common-functions.gc
   ;;(process-spawn-function process music-manager-proc)
-  (none)
-  )
+  (none))
 
 (defun runs-on-jak-death ((death-event symbol))
   (case death-event
     (('dying)
-      ;; Code here runs immediately every time jak dies, before any death animation or death cutscene
-
-      )
+     ;; Code here runs immediately every time jak dies, before any death animation or death cutscene
+     )
     (('blackout)
-      ;; Code here runs after jak dies (and any death cutscene finishes), during the blackout before he spawns
-
-      )
-    )
-
-  (none)
-  )
-
+     ;; Code here runs after jak dies (and any death cutscene finishes), during the blackout before he spawns
+     ))
+  (none))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; deprecated function defintions.
 ;;;;;;;;;;;;;;;;;;;;;;;;;;
 
-#| these are no longer recommended/supported however we include them anyways to not break anyones mods.
-|#
+#| these are no longer recommended/supported however we include them anyways to not break anyones mods. |#
