@@ -807,7 +807,7 @@
   (rng-lib                      #x1703)
   (mod-powercellcutscenes       #x1704)
   (additional-checkpoints       #x1705)
-  
+
   ;; Checkpoint Randomizer
   (item-count-to-trigger-warp   #x1710)
   (use-random-seed?             #x1711)
