@@ -8,6 +8,7 @@
 (require "engine/gfx/shadow/shadow-cpu-h.gc")
 (require "engine/collide/collide-shape-rider.gc")
 (require "engine/load/loader.gc")
+(define-extern *hide-jak?* symbol)
 
 ;; TODO: there are some missing functions here...
 
@@ -597,7 +598,8 @@
   (let ((gp-0 (-> obj skel)))
     (label cfg-1)
     (let ((s4-0 (-> gp-0 active-channels)))
-      (b! (logtest? (-> obj draw status) (draw-status hidden)) cfg-27)
+      (when (not *hide-jak?*)
+        (b! (logtest? (-> obj draw status) (draw-status hidden)) cfg-27))
       (let ((s3-0 0))
         (b! #t cfg-13 :delay (nop!))
         (label cfg-3)

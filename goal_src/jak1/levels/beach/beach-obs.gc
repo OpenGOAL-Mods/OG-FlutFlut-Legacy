@@ -21,7 +21,6 @@
   (:states
    windmill-one-idle))
 
-
 (defskelgroup *windmill-one-sg*
   windmill-one
   windmill-one-lod0-jg
@@ -167,7 +166,6 @@
    grottopole-idle
    grottopole-moving-down
    grottopole-moving-up))
-
 
 (defskelgroup *grottopole-sg*
   grottopole
@@ -320,7 +318,6 @@
   ((root collide-shape :override))
   (:states (ecoventrock-break symbol)
    ecoventrock-idle))
-
 
 (defskelgroup *ecoventrock-sg*
   ecoventrock
@@ -573,7 +570,6 @@
    flying-rock-idle
    flying-rock-rolling))
 
-
 (defskelgroup *kickrock-sg*
   kickrock
   kickrock-lod0-jg
@@ -679,7 +675,6 @@
   (:states
    bladeassm-idle))
 
-
 (defskelgroup *bladeassm-sg*
   bladeassm
   bladeassm-lod0-jg
@@ -744,7 +739,6 @@
    flutflutegg-physics
    flutflutegg-physics-fall))
 
-
 (defskelgroup *flutflutegg-sg*
   flutflutegg
   flutflutegg-lod0-jg
@@ -786,8 +780,11 @@
   :event
     (behavior ((proc process) (argc int) (message symbol) (block event-message-block))
       (when (and (= message 'attack)
-                 (or (= (-> block param 1) 'punch) (= (-> block param 1) 'spin) (= (-> block param 1) 'spin-air)
-                     (= (-> block param 1) 'flut-attack) (= (-> block param 1) 'flut))
+                 (or (= (-> block param 1) 'punch)
+                     (= (-> block param 1) 'spin)
+                     (= (-> block param 1) 'spin-air)
+                     (= (-> block param 1) 'flut-attack)
+                     (= (-> block param 1) 'flut))
                  (!= (-> self incomming-attack-id) (-> block param 2)))
         (set! (-> self incomming-attack-id) (-> block param 2))
         (flutflutegg-hit-sounds)
@@ -836,8 +833,11 @@
     (behavior ((proc process) (argc int) (message symbol) (block event-message-block))
       (when (and (time-elapsed? (-> self state-time) (seconds 0.5))
                  (= message 'attack)
-                 (or (= (-> block param 1) 'punch) (= (-> block param 1) 'spin) (= (-> block param 1) 'spin-air)
-                     (= (-> block param 1) 'flut-attack) (= (-> block param 1) 'flut))
+                 (or (= (-> block param 1) 'punch)
+                     (= (-> block param 1) 'spin)
+                     (= (-> block param 1) 'spin-air)
+                     (= (-> block param 1) 'flut-attack)
+                     (= (-> block param 1) 'flut))
                  (!= (-> self incomming-attack-id) (-> block param 2)))
         (set! (-> self incomming-attack-id) (-> block param 2))
         (flutflutegg-hit-sounds)
@@ -1002,7 +1002,6 @@
    harvester-idle
    (harvester-inflate symbol)))
 
-
 (defskelgroup *harvester-sg*
   harvester
   harvester-lod0-jg
@@ -1102,7 +1101,6 @@
   (none))
 
 (deftype beachcam (process-hidden) ())
-
 
 (defun beachcam-spawn ()
   (with-pp

@@ -233,8 +233,7 @@
         v0-0)
        ((= (-> arg0 type) target)
         (cond
-          ((or (= (-> arg3 param 1) 'flop) (= (-> arg3 param 1) 'flut-attack))
-           (go bully-die) (return #t) v0-0)
+          ((or (= (-> arg3 param 1) 'flop) (= (-> arg3 param 1) 'flut-attack)) (go bully-die) (return #t) v0-0)
           ((or (= arg2 'touch) (= arg2 'attack))
            (cond
              ((>= (- (-> (target-pos 0) y) (-> self root trans y)) 6144.0)

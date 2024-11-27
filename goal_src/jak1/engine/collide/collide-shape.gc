@@ -676,10 +676,10 @@
        (send-event (-> obj process) 'attack #f (static-attack-info ((mode 'deadly) (shove-up (meters 3))))))
       (((pat-event burn))
        ;; burn. Send a burn event
-        ;;flut-flut
+       ;;flut-flut
        (when (not (or (and (= (-> *target* current-level name) 'firecanyon) (>= (the int (-> *game-info* fuel)) 20))
                       (and (= (-> *target* current-level name) 'lavatube) (>= (the int (-> *game-info* fuel)) 72))))
-        (send-event (-> obj process) 'attack #f (static-attack-info ((mode 'burn) (shove-up (meters 3)))))))
+         (send-event (-> obj process) 'attack #f (static-attack-info ((mode 'burn) (shove-up (meters 3)))))))
       (((pat-event deadlyup))
        ;; deadlyup. Launch!
        (target-attack-up (the-as target (-> obj process)) 'attack-or-shove 'deadlyup))
@@ -687,9 +687,9 @@
        ;; burnup (like fire canyon lava).
        ;; only send if we don't have zoomer
        ;;flut flut
-       (when (not (or (and (= (-> *target* current-level name) 'firecanyon) (>= (the int (-> *game-info* fuel)) 20)) 
+       (when (not (or (and (= (-> *target* current-level name) 'firecanyon) (>= (the int (-> *game-info* fuel)) 20))
                       (and (= (-> *target* current-level name) 'lavatube) (>= (the int (-> *game-info* fuel)) 72))))
-        (if (zero? (logand (-> (the-as target (-> obj process)) control root-prim prim-core action) (collide-action racer)))
+         (if (zero? (logand (-> (the-as target (-> obj process)) control root-prim prim-core action) (collide-action racer)))
            (target-attack-up (the-as target (-> obj process)) 'attack-or-shove 'burnup))))
       (((pat-event melt))
        ;; just send melt

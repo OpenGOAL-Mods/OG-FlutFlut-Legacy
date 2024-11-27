@@ -10,8 +10,8 @@
 
 ;; DECOMP BEGINS
 
-
 (define s73-1 #f)
+
 (defskelgroup *med-res-ogre-sg*
   medres-ogre
   medres-ogre-lod0-jg

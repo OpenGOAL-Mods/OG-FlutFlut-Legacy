@@ -69,18 +69,15 @@
 
 ;; returns a pseudorandom float in the range [min, max)
 (defun knuth-rand-float-range ((min float) (max float))
-  (+ min (* (knuth-rand-next-float) (- max min)))
-  )
+  (+ min (* (knuth-rand-next-float) (- max min))))
 
 ;; Get a boolean that's true with the given probability
 (defun knuth-rand-percent? ((prob float))
-  (>= prob (knuth-rand-next-float))
-  )
+  (>= prob (knuth-rand-next-float)))
 
 ;; Get an integer in the range [0, max)
 (defun knuth-rand-int-count ((max int))
-  (the int (* (knuth-rand-next-float) (the float max)))
-  )
+  (the int (* (knuth-rand-next-float) (the float max))))
 
 (knuth-rand-init (scf-time-to-int64))
 

@@ -127,9 +127,7 @@
 
 (deftype target-start (process-hidden) ())
 
-
 (deftype camera-start (process-hidden) ())
-
 
 (defstate manipy-idle (manipy)
   :event
@@ -683,7 +681,6 @@
   (:states
    med-res-level-idle))
 
-
 (defstate med-res-level-idle (med-res-level)
   :code
     (behavior ()
@@ -831,7 +828,6 @@
    launcher-active
    launcher-deactivated
    launcher-idle))
-
 
 (defpartgroup group-beach-launcher
   :id 37
@@ -1203,7 +1199,7 @@
     (behavior ((proc process) (argc int) (message symbol) (block event-message-block))
       ;;Hack here to just work if we are close to it. flut flutflut
       (when (or (>= (vector-vector-distance (-> self root trans) (-> *target* root trans)) (meters 0.1)) (= message 'attack))
-      ;; (when (or (= message 'touch) (= message 'attack))
+        ;; (when (or (= message 'touch) (= message 'attack))
         (set-time! (-> self state-time))
         (send-event proc 'launch (-> self spring-height) (-> self camera) (-> self dest) (-> self seek-time)))
       (cond

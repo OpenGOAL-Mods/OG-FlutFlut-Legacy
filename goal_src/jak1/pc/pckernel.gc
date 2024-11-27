@@ -513,8 +513,11 @@
 
 ;; This is the settings object, all new settings types must be initalized here.
 (define-once *randomizer-settings* (new 'global 'randomizer-settings))
+
 (define-once *challenges-settings* (new 'global 'challenges-settings))
+
 (define-once *mods-settings* (new 'global 'mods-settings))
+
 (define-once *pc-settings* (new 'global 'pc-settings-jak1))
 
 ;; This function updates all settings files, if a new settings type is added it needs to be added to this function.
@@ -522,9 +525,8 @@
   (commit-to-file *pc-settings*)
   (commit-to-file *randomizer-settings*)
   (commit-to-file *challenges-settings*)
-  (commit-to-file *mods-settings*)
-)
-  
+  (commit-to-file *mods-settings*))
+
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;;; other
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;

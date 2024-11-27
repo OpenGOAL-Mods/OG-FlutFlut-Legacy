@@ -17,27 +17,31 @@
 ;;;;;;;;;;;;;;;;;;;;;;;;;;
 (defun-extern runs-every-frame (none))
 
-(define racer? #f) 
+(define racer? #f)
+
 (define flutflut? #f)
 
 (define-extern randomizer-run-each-frame (function none))
+
 (define-extern jak-size-run-each-frame (function (none)))
+
 (define-extern mods-common-run-each-frame (function (none)))
+
 (define-extern localmulti-run-eachframe (function (none)))
-(defun runMods()
-(randomizer-run-each-frame)
-(jak-size-run-each-frame)
-(mods-common-run-each-frame)
-(localmulti-run-eachframe)
-(none))
+
+(defun runMods ()
+  (randomizer-run-each-frame)
+  (jak-size-run-each-frame)
+  (mods-common-run-each-frame)
+  (localmulti-run-eachframe)
+  (none))
 
 (defun reset-all ()
-;;(dotimes (i 205) (sound-play-by-name (static-sound-name "caught-eel") (new-sound-id) 1024 0 0 (sound-group sfx) #t))
-(reset! *game-info* 'game (the-as game-save #f) (the-as string #f))
+  ;;(dotimes (i 205) (sound-play-by-name (static-sound-name "caught-eel") (new-sound-id) 1024 0 0 (sound-group sfx) #t))
+  (reset! *game-info* 'game (the-as game-save #f) (the-as string #f))
   (auto-save-command 'auto-save 0 0 *default-pool*)
   ;;(dotimes (i 205) (sound-play-by-name (static-sound-name "caught-eel") (new-sound-id) 1024 0 0 (sound-group sfx) #t))
-  (none)
-)
+  (none))
 
 (defun set-letterbox-frames ((arg0 time-frame))
   "Set the letterbox frame counter for arg0 frames in the future"
@@ -97,50 +101,64 @@
           (or (= *master-mode* 'pause)
               (or (and *progress-process* (not (hidden? (-> *progress-process* 0)))) (= *master-mode* 'menu)))))
 
+(define *hide-jak?* #t)
+
+(defun hide-jak-override ()
+  "This function returns true when we should show jak regardless of the value of *hide-jak*"
+  ;;Add cutscenes jak SHOULDNT appear in here (flut cell cutscenes etc)
+  (if (string= (-> *art-control* active-stream) "fuel-cell-flut-victory-1") (return #f))
+  ;;This makes jak appear in movies, if you want him to be hidden in a specific movie, return #t above this
+  (if (logtest? (-> *kernel-context* prevent-from-run) (process-mask movie)) (return #t))
+  #f)
+
+(defun toggle-hide-jak ()
+  (set! *hide-jak?* (not *hide-jak?*)))
+
 (defun movie? ()
-
-(set! flutflut? (aif *target* (case (-> it next-state name) (
-                                      (
-                                       'target-flut-air-attack
-                                       'target-flut-air-attack-hit-ground
-                                       'target-flut-clone-anim
-                                       'target-flut-death
-                                       'target-flut-double-jump
-                                       'target-flut-falling
-                                       'target-flut-get-off
-                                       'target-flut-get-off-hit-ground
-                                       'target-flut-get-off-jump
-                                       'target-flut-get-on
-                                       'target-flut-grab
-                                       'target-flut-hit
-                                       'target-flut-hit-ground
-                                       'target-flut-jump
-                                       'target-flut-running-attack
-                                       'target-flut-stance
-                                       'target-flut-start
-                                       'target-flut-walk
-                                       ;; not flutflut, but we don't need to force flutflut in these cases
-                                       'target-periscope
-                                       'target-falling
-                                       'target-clone-anim
-                                       'target-play-anim
-                                       'target-billy-game
-                                       'target-look-around
-                                       'target-fishing
-                                       ;; launcher crap
-                                       'target-launch
-                                       'target-high-jump
-                                       'target-duck-high-jump
-                                       'target-duck-high-jump-jump
-                                       'target-hit-ground) #t))))
-
-(if (and (not flutflut?) (not (and (logtest? (-> *kernel-context* prevent-from-run) (process-mask movie)) (or (= (-> *target* current-level name) 'jungle)(= (-> *target* current-level name) 'village1) )))) (send-event *target* 'change-mode 'flut #f))
-
-
+  (set! flutflut?
+        (aif *target*
+             (case (-> it next-state name)
+               (('target-flut-air-attack 'target-flut-air-attack-hit-ground
+                                        'target-flut-clone-anim
+                                        'target-flut-death
+                                        'target-flut-double-jump
+                                        'target-flut-falling
+                                        'target-flut-get-off
+                                        'target-flut-get-off-hit-ground
+                                        'target-flut-get-off-jump
+                                        'target-flut-get-on
+                                        'target-flut-grab
+                                        'target-flut-hit
+                                        'target-flut-hit-ground
+                                        'target-flut-jump
+                                        'target-flut-running-attack
+                                        'target-flut-stance
+                                        'target-flut-start
+                                        'target-flut-walk
+                                        ;; not flutflut, but we don't need to force flutflut in these cases
+                                        'target-periscope
+                                        'target-falling
+                                        'target-clone-anim
+                                        'target-play-anim
+                                        'target-billy-game
+                                        'target-look-around
+                                        'target-fishing
+                                        ;; launcher crap
+                                        'target-launch
+                                        'target-high-jump
+                                        'target-duck-high-jump
+                                        'target-duck-high-jump-jump
+                                        'target-hit-ground)
+                #t))))
+  (when *target*
+    (when (and *hide-jak?* (not (hide-jak-override)))
+      (logior! (-> *target* draw status) (draw-status hidden))))
+  (if (and (not flutflut?)
+           (not (and (logtest? (-> *kernel-context* prevent-from-run) (process-mask movie))
+                     (or (= (-> *target* current-level name) 'jungle) (= (-> *target* current-level name) 'village1)))))
+    (send-event *target* 'change-mode 'flut #f))
   "Are we in a movie?"
   (logtest? (-> *kernel-context* prevent-from-run) (process-mask movie)))
-
- 
 
 (defun set-master-mode ((new-mode symbol))
   "Update pause masks for the given mode, and set *master-mode*"
@@ -289,15 +307,18 @@
 (define *progress-cheat* #f)
 
 (define *first-boot* #t) ;; PAL
+
 (defun-extern localmulti2-start (none))
+
 (defun-extern localmulti3-start (none))
+
 (defun-extern localmulti4-start (none))
+
 (defun-extern spawn-extra-targets-code (none))
+
 (defun main-cheats ()
   "Handle cheat codes and timeout"
-
   (spawn-extra-targets-code)
-
   ;; look for codes when L3 is pushed
   (when (and (cpad-hold? 0 l3)
              (or *cheat-mode* (= *kernel-boot-message* 'play)) ;; not in demo
@@ -429,9 +450,7 @@
       (runs-every-frame) ;; trigger hook for mod base mod-base-change entry point
       ;; start immediately after all process updates finish.
       (profiler-instant-event "display-loop-top")
-
       (runMods)
-
       ;; drawing effects to be used in foreground drawing.
       (with-profiler "foreground-effects"
         ;; with FP blerc, the vertices are modified in the PC renderer, so we can just skip

@@ -18,7 +18,6 @@
    (stick-lock    basic)
    (flap-sound-id sound-id)))
 
-
 (deftype flut-bank (basic)
   ((jump-height-min        meters)
    (jump-height-max        meters)
@@ -28,6 +27,7 @@
    (ground-timeout         time-frame)))
 
 (define *flut-bounce-count* 0.0)
+
 (define *FLUT-bank*
   (new 'static
        'flut-bank
@@ -236,19 +236,14 @@
 
 (defbehavior target-flut-standard-event-handler target ((arg0 process) (arg1 int) (arg2 symbol) (arg3 event-message-block))
   (cond
-    ((or
-        (and (= (-> *target* current-level name) 'firecanyon) (>= (the int (-> *game-info* fuel)) 20))
-        (and(= (-> *target* current-level name) 'lavatube)(>= (the int (-> *game-info* fuel)) 72))
-        (string= (-> (-> *game-info* current-continue) name)"ogre-race"))
+    ((or (and (= (-> *target* current-level name) 'firecanyon) (>= (the int (-> *game-info* fuel)) 20))
+         (and (= (-> *target* current-level name) 'lavatube) (>= (the int (-> *game-info* fuel)) 72))
+         (string= (-> (-> *game-info* current-continue) name) "ogre-race"))
      (set! (-> *flut-walk-mods* target-speed) (* 2.0 81920.0))
-     (set! (-> *flut-walk-mods* fric) 0.001)
-     )
+     (set! (-> *flut-walk-mods* fric) 0.001))
     ((= (-> *flut-walk-mods* target-speed) (* 2.0 81920.0))
      (set! (-> *flut-walk-mods* target-speed) 81920.0)
-     (set! (-> *flut-walk-mods* fric) 1.0)
-     )
-    )
-
+     (set! (-> *flut-walk-mods* fric) 1.0)))
   (cond
     ((and (= arg2 'query) (= (-> arg3 param 0) 'mode)) 'flut)
     (else
@@ -287,16 +282,16 @@
         (case (-> arg3 param 0)
           (('grab) (go target-flut-grab))
           (('fishing 'billy 'look-around 'periscope)
-            ;; handles changing to look-around, fish game, rats game, periscopes, etc
-            (target-standard-event-handler arg0 arg1 arg2 arg3))))
-      ;; copying this over but it doesn't look reachable
-      ;;  (('launch)
-      ;;    (mem-copy! (&-> (-> self control) unknown-pointer00) (the-as pointer arg3) 72)
-      ;;    (let ((a0-9 (-> self control unknown-dword60))
-      ;;           (a1-5 (-> self control unknown-dword61))
-      ;;           (a2-5 (-> self control unknown-vector102)))
-      ;;       (set! (-> a2-5 quad) (-> (the-as vector (-> self control unknown-dword62)) quad))
-      ;;       (go target-launch (the-as float a0-9) (the-as symbol a1-5) a2-5 (-> self control unknown-dword63))))
+           ;; handles changing to look-around, fish game, rats game, periscopes, etc
+           (target-standard-event-handler arg0 arg1 arg2 arg3))))
+       ;; copying this over but it doesn't look reachable
+       ;;  (('launch)
+       ;;    (mem-copy! (&-> (-> self control) unknown-pointer00) (the-as pointer arg3) 72)
+       ;;    (let ((a0-9 (-> self control unknown-dword60))
+       ;;           (a1-5 (-> self control unknown-dword61))
+       ;;           (a2-5 (-> self control unknown-vector102)))
+       ;;       (set! (-> a2-5 quad) (-> (the-as vector (-> self control unknown-dword62)) quad))
+       ;;       (go target-launch (the-as float a0-9) (the-as symbol a1-5) a2-5 (-> self control unknown-dword63))))
        (('clone-anim) (go target-flut-clone-anim (process->handle (the-as process (-> arg3 param 0)))))
        (else (target-generic-event-handler arg0 arg1 arg2 arg3))))))
 
@@ -561,47 +556,18 @@
     (behavior ((arg0 float) (arg1 float))
       ;; handle launch jump
       (when (= (-> self control unknown-symbol40) 'launch)
-        (level-hint-spawn
-          (text-id sidekick-launcher1)
-          "sksp009d"
-          (the-as entity #f)
-          *entity-pool*
-          (game-task none)
-          )
-        (level-hint-spawn
-          (text-id sidekick-launcher2)
-          "sksp009e"
-          (the-as entity #f)
-          *entity-pool*
-          (game-task none)
-          )
+        (level-hint-spawn (text-id sidekick-launcher1) "sksp009d" (the-as entity #f) *entity-pool* (game-task none))
+        (level-hint-spawn (text-id sidekick-launcher2) "sksp009e" (the-as entity #f) *entity-pool* (game-task none))
         (case (-> (level-get-target-inside *level*) name)
           (('citadel)
-          (level-hint-spawn
-            (text-id citadel-launcher2)
-            "sksp0393"
-            (the-as entity #f)
-            *entity-pool*
-            (game-task none)
-            )
-          (level-hint-spawn
-            (text-id citadel-launcher)
-            "sksp0388"
-            (the-as entity #f)
-            *entity-pool*
-            (game-task none)
-            )
-          )
-          )
+           (level-hint-spawn (text-id citadel-launcher2) "sksp0393" (the-as entity #f) *entity-pool* (game-task none))
+           (level-hint-spawn (text-id citadel-launcher) "sksp0388" (the-as entity #f) *entity-pool* (game-task none))))
         enter-state
         (let ((a0-9 (-> self control unknown-dword60))
               (a1-5 (-> self control unknown-dword61))
-              (a2-5 (-> self control unknown-vector102))
-              )
+              (a2-5 (-> self control unknown-vector102)))
           (set! (-> a2-5 quad) (-> (the-as vector (-> self control unknown-dword62)) quad))
-          (go target-launch (the-as float a0-9) (the-as symbol a1-5) a2-5 (-> self control unknown-dword63))
-          )
-        )
+          (go target-launch (the-as float a0-9) (the-as symbol a1-5) a2-5 (-> self control unknown-dword63))))
       ;; normal jump
       (set-time! (-> self state-time))
       (sound-play "jump" :pitch -0.5)
@@ -687,12 +653,9 @@
         enter-state
         (let ((a0-3 (-> self control unknown-dword60))
               (a1-1 (-> self control unknown-dword61))
-              (a2-0 (-> self control unknown-vector102))
-              )
+              (a2-0 (-> self control unknown-vector102)))
           (set! (-> a2-0 quad) (-> (the-as vector (-> self control unknown-dword62)) quad))
-          (go target-launch (the-as float a0-3) (the-as symbol a1-1) a2-0 (-> self control unknown-dword63))
-          )
-        )
+          (go target-launch (the-as float a0-3) (the-as symbol a1-1) a2-0 (-> self control unknown-dword63))))
       ;; normal jump
       (set-time! (-> self state-time))
       (init-var-jump arg0 arg1 (the-as vector #t) (the-as vector #t) (-> self control transv))
@@ -1206,8 +1169,7 @@
                  (ja-channel-push! 1 (seconds 0.075))
                  (ja :group! eichar-flut-hit-back-ja :num! min))))
             ;; only keep bouncing if we have some health left
-            (if (< 0.0 (-> self fact health))
-              (target-hit-move gp-0 (target-hit-orient gp-0 s5-0) target-flut-falling-anim-trans f30-0))))
+            (if (< 0.0 (-> self fact health)) (target-hit-move gp-0 (target-hit-orient gp-0 s5-0) target-flut-falling-anim-trans f30-0))))
         (if (and (= (-> self game mode) 'play) (>= 0.0 (-> self fact health))) (go target-flut-death (-> gp-0 mode))))
       (go target-flut-hit-ground))
   :post target-flut-post)
@@ -1230,8 +1192,7 @@
       (local-vars (v1-104 symbol))
       (logior! (-> self state-flags) (state-flags dying))
       (when (and (-> *randomizer-settings* checkpoint-randomizer?) (-> *randomizer-settings* warp-on-death?))
-        (orchestrateCheckpointWarp 1)
-        )
+        (orchestrateCheckpointWarp 1))
       (set! (-> self neck flex-blend) 0.0)
       (target-timed-invulnerable-off self)
       (add-setting! 'process-mask 'set 0.0 (process-mask enemy platform projectile death))
@@ -1324,16 +1285,16 @@
           (set! (-> self control unknown-vector102 quad) (-> gp-0 quad))
           (set! (-> self control unknown-vector103 quad) (-> s5-0 quad))))
       ;; (let ((gp-1 #f))
-        (sound-play "uppercut")
-        ;; (ja-channel-push! 1 (seconds 0.05))
-        ;; (ja-no-eval :group! eichar-flut-get-on-ja :num! (seek! (ja-aframe (the-as float 24.0) 0)) :frame-num 0.0)
-        ;; (until (ja-done? 0)
-        ;;   (when (and (not gp-1) (= (-> self skel root-channel 0) (-> self skel channel)))
-            (send-event (ppointer->process (-> self manipy)) 'anim-mode 'clone-anim)
-            ;; (set! gp-1 #t))
-          (set! (-> self control transv quad) (the-as uint128 0))
-          ;; (suspend)
-          ;; (ja :num! (seek! (ja-aframe (the-as float 24.0) 0)))))
+      (sound-play "uppercut")
+      ;; (ja-channel-push! 1 (seconds 0.05))
+      ;; (ja-no-eval :group! eichar-flut-get-on-ja :num! (seek! (ja-aframe (the-as float 24.0) 0)) :frame-num 0.0)
+      ;; (until (ja-done? 0)
+      ;;   (when (and (not gp-1) (= (-> self skel root-channel 0) (-> self skel channel)))
+      (send-event (ppointer->process (-> self manipy)) 'anim-mode 'clone-anim)
+      ;; (set! gp-1 #t))
+      (set! (-> self control transv quad) (the-as uint128 0))
+      ;; (suspend)
+      ;; (ja :num! (seek! (ja-aframe (the-as float 24.0) 0)))))
       (sound-play "flut-coo")
       (logclear! (-> self state-flags) (state-flags use-alt-cam-pos))
       (set! (-> self control transv quad) (the-as uint128 0))

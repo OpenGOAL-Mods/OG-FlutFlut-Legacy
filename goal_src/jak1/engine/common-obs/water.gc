@@ -968,7 +968,7 @@
   :code
     (behavior ()
       ;; OG-flutflut-legacy dont spawn dark cave water for crystal access
-      (when (name= (-> self name) 'cave-water-3) 
+      (when (name= (-> self name) 'cave-water-3)
         (deactivate self))
       (go-virtual water-vol-idle)))
 

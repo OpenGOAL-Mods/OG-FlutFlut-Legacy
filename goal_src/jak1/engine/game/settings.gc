@@ -189,9 +189,7 @@
                       (zero? (rpc-busy? 1))
                       *sound-bank-1*
                       *sound-bank-2*
-                      *sound-bank-3*
-                      )
-                 )
+                      *sound-bank-3*))
         (cond
           ((-> s5-1 music)
            (format 0 "Load music ~A~%" (-> s5-1 music))

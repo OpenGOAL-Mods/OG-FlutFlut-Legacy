@@ -223,8 +223,9 @@
                        (set! s2-0 #t))
                      (if (logtest? (-> sv-96 prim-id) 2) (set! s3-0 #t))
                      (set! s0-0 (-> s0-0 next))
-                     (when (> infin-loop-count 100) (set! s0-0 #f) (format 0 "driller-lurker hack - prevent infinite loop~%"))
-                     ))
+                     (when (> infin-loop-count 100)
+                       (set! s0-0 #f)
+                       (format 0 "driller-lurker hack - prevent infinite loop~%"))))
                  (cond
                    ((or s2-0 (not s3-0))
                     (when (send-event arg0 'attack (-> arg3 param 0) (static-attack-info ((shove-up (meters 2)) (shove-back (meters 3)))))
