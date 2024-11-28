@@ -4,6 +4,7 @@
   ;; "flut-part.o"
   ;; "flutflut.o"
   ;; "target-flut.o" mod-base-change
+  "generic-obs.o"
   "eichar-flut+0-ag.go"
   "swamp-obs.o"
   "swamp-bat.o"
