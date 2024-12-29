@@ -101,7 +101,7 @@
           (or (= *master-mode* 'pause)
               (or (and *progress-process* (not (hidden? (-> *progress-process* 0)))) (= *master-mode* 'menu)))))
 
-(define *hide-jak?* #t)
+(define *hide-jak?* #f)
 
 (defun hide-jak-override ()
   "This function returns true when we should show jak regardless of the value of *hide-jak*"
