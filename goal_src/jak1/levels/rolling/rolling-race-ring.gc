@@ -561,7 +561,7 @@
                                                (-> self root trans)
                                                :to
                                                self))))
-      (set! (-> self old-hips quad) (-> (target-pos 26) quad))
+      (set! (-> self old-hips quad) (-> (target-pos 0) quad))
       (+! (-> self old-hips x) 1.0)
       (set! (-> self state-time) (-> *display* game-frame-counter)))
   :exit
@@ -657,7 +657,7 @@
         (when *target*
           (let ((gp-0 (new 'stack-no-clear 'vector)))
             (set! (-> gp-0 quad) (-> self old-hips quad))
-            (set! (-> self old-hips quad) (-> (target-pos 26) quad))
+            (set! (-> self old-hips quad) (-> (target-pos 0) quad))
             (vector-! gp-0 gp-0 (-> self old-hips))
             (when (>= (ray-flat-cyl-intersect (-> self cyl) (-> self old-hips) gp-0) 0.0)
               (level-hint-spawn (text-id rolling-ring-chase-1-hint) "sksp0119" (the-as entity #f) *entity-pool* (game-task none))
